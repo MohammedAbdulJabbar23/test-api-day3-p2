@@ -44,12 +44,12 @@ uvicorn main:app --reload
         Headers: Authorization: Bearer <token>
         Request Body:
 
-        json
+json
 
-{
-    "text": "Your comment text here",
-    "postId": 123
-}
+    {
+        "text": "Your comment text here",
+        "postId": 123
+    }
 
 Response Body:
 
@@ -76,12 +76,12 @@ POST /login - Log in an existing user and receive an access token.
 
     Request Body:
 
-    json
+json
 
-{
-    "username": "moomomo",
-    "password": "New comment"
-}
+    {
+        "username": "moomomo",
+        "password": "New comment"
+    }
 
 Response Body:
 
@@ -97,12 +97,12 @@ POST /posts - Create a new post.
     Headers: Authorization: Bearer <token>
     Request Body:
 
-    json
-
-{
-    "title": "test post",
-    "content": "post testing testing post"
-}
+json
+    
+    {
+        "title": "test post",
+        "content": "post testing testing post"
+    }
 
 Response Body:
 
