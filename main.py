@@ -16,7 +16,6 @@ app.include_router(post.router)
 app.include_router(user.router)
 app.include_router(comment.router)
 
-# Initialize Tortoise ORM
 register_tortoise(
     app,
     db_url='sqlite://db.sqlite3',

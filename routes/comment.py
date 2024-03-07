@@ -19,23 +19,47 @@ async def get_user_posts_with_comments(current_user: User = Depends(get_current_
             "id": post.id,
             "title": post.title,
             "content": post.content,
+            "author": post.author,
             "comments": [comment.dict() for comment in post.comments]
         }
         posts_with_comments.append(post_data)
     return posts_with_comments
+
+
 
 @router.post("/comments/", response_model=CommentSchema)
 async def create_comment(
     comment: CommentCreate, current_user: User = Depends(get_current_user)
 ):
     comment_data = comment.dict()
-    comment_data["author_id"] = current_user.id  # Set the author_id to the current user's ID
+    comment_data["author_id"] = current_user.id  
 
-    # Create the comment
     new_comment = await Comment.create(**comment_data)
     
-    # Return the created comment
     return new_comment
+
+@router.get("/posts-with-comments/{user_id}", response_model=List[PostWithComments])
+async def get_user_posts_with_comments(user_id: int):
+    user_posts = await Post.filter(author_id=user_id).prefetch_related("comments")
+    posts_with_comments = []
+    for post in user_posts:
+        comments = []
+        for comment in post.comments:
+            comments.append({
+                "id": comment.id,
+                "text": comment.text,
+                "user_id": comment.user_id
+            })
+        posts_with_comments.append({
+            "id": post.id,
+            "title": post.title,
+            "content": post.content,
+            "comments": comments  
+        })
+    return posts_with_comments
+
+
+
 
 @router.get("/comments/", response_model=List[CommentSchema])
 async def read_comments():
